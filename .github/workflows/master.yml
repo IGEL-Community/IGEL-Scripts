@@ -1,4 +1,4 @@
-name: MasterDeployScript2
+name: MasterDeployScript
 on:
   push:
     branches:
