@@ -1,4 +1,4 @@
-name: MasterDeployScript_ManualRun
+name: ManualRun
 on:
   workflow_dispatch:
   
