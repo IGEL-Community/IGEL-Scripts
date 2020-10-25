@@ -1,0 +1,14 @@
+Host *
+ServerAliveInterval 10
+ServerAliveCountMax 9999999
+IPQoS 0x00
+
+Host alias1-home
+  Hostname host-name-home
+  IdentityFile ~/.ssh/id_rsa
+  User user-name
+
+Host alias1-away
+  Hostname host-name-away
+  IdentityFile ~/.ssh/id_rsa
+  User user-name
