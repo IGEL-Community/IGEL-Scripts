@@ -36,12 +36,17 @@ The first script is the SetBait script which copies the dummy file to each locat
 The second script is the DetectRansonware script, which is a light-weight script that can be scheduled to run every few minutes with very little system impact.  This script loops through each folder location in the config file, and checks the following:
 
 Does the dummy file exist in the location?
+
 - Yes: is it still identical to the local dummy file?
+
    - Yes: no worries!
+
    - No: Ransomware?? An email is sent immediately to the assigned user(s) with the threat warning and the location.  (“11/2/2020 3:03 pm POTENTIAL Ransomware detected in folder \\\\shared\Finance\2019”)
-<br />  
+
 -	No: does the location exist?
+
    - Yes: copy the dummy file back to the location and add that action to a warning string (“11/2/2020 3:03 pm  Dummy file did not exist in folder \\\\shared\Finance\2019.  Copied”)
+
    - No: verify that the root of the listed location exists, e.g. \\\\shared and add that to a warning string (“11/2/2020 3:05 pm Could not reach location \\\\userdata”
 
 When finished with each location, if the warning string is not empty, then email it with a lesser warning, as these could just be artifacts from temporary outages or user interference, but it could signal the need for investigation or changing the bait locations.
