@@ -1,11 +1,11 @@
-# Ransomeware Detection
+# Ransomware Detection
 
 ***
-## Method to monitor file shares for Ransomeware
+## Method to monitor file shares for Ransomware
 
 | Name | Description |
 |------|-------------|
-|[Ransomware_detect.vbs](Ransomeware_detect.vbs)|Script to check for the existence / validity of files on shares to catch ransomware before it causes major issues. Sends an email notifying people if there was a problem. |
+|[Ransomware_detect.vbs](Ransomware_detect.vbs)|Script to check for the existence / validity of files on shares to catch ransomware before it causes major issues. Sends an email notifying people if there was a problem. |
 |[SetBait.vbs](SetBait.vbs)| Script to copy and icacl the BAIT file to the shares listed in the shares.txt file.<br /><br /> shares.txt should be of the form:<br /><br /> \\foldername[,additionalemailaddress]|
 |[shares.txt](shares.txt)|File shares to monitor|
 |[_debug.docx](_debug.docx)|File to place into shares|
