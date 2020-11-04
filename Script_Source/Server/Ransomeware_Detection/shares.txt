@@ -1,0 +1,6 @@
+# To comment out a location, just put a # in front of the line.
+#
+\\shared\finance\2019
+\\shared\finance\2020
+\\shared\purchasing\contracts,purchasingadmin@thiscorp.org
+# this is a comment
