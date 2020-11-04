@@ -6,8 +6,8 @@
 | Name | Description |
 |------|-------------|
 |[Ransomware_detect.vbs](Ransomware_detect.vbs)|Script to check for the existence / validity of files on shares to catch ransomware before it causes major issues. Sends an email notifying people if there was a problem. |
-|[SetBait.vbs](SetBait.vbs)| Script to copy and icacl the BAIT file to the shares listed in the shares.txt file.<br /><br /> shares.txt should be of the form:<br /><br /> \\foldername[,additionalemailaddress]|
-|[shares.txt](shares.txt)|File shares to monitor|
+|[SetBait.vbs](SetBait.vbs)| Script to copy and icacl the BAIT file to the shares listed in the shares.txt file.
+|[shares.txt](shares.txt)|File shares to monitor<br /><br /> each entry should be of the form:<br /><br /> \\foldername[,additionalemailaddress]|
 |[_debug.docx](_debug.docx)|File to place into shares|
 |[log.txt](log.txt)|Log file|
 
