@@ -16,4 +16,5 @@
 | Update SSH server to allow X11 forwarding | -	On UMS server, edit /etc/ssh/ssh_config file (uncomment / remove “#”): <br /> ***	ForwardX11 yes <br /> ***	Forward11Trusted yes <br /> -	Restart SSH <br /> ***	sudo systemctl restart sshd.service <br /> -	Ref - [X11 Forwarding](https://tinyurl.com/x11-forwarding) |
 | IGEL OS endpoint SSH setup | -	On IGEL OS endpoint, open a terminal window as user <br /> -	Generate key pairs (~/.ssh folder) <br /> ***	ssh-keygen  <br /> -	Copy public key to Linux UMS server <br /> ***	ssh-copy-id username@ums_server <br /> -	Test connection <br /> ***	ssh -l username ums_server |
 | SSH X11 forwarding from IGEL OS endpoint to UMS server | -	On IGEL OS endpoint, open a terminal window and start SSH connection to the UMS server <br /> ***	ssh -X username@ums_server <br /> -	**Note**: For slow connections, add -C (compression) to the ssh command |
-| Start UMS console | -	On IGEL OS endpoint, in the SSH terminal window, start UMS Console <br /> ***	/opt/IGEL/RemoteManager/RemoteManager.sh |
+| Install UMS console | - During the install of the UMS Console, add version number to the path: /opt/IGEL/RemoteManager-606100 |
+| Start UMS console | -	On IGEL OS endpoint, in the SSH terminal window, start UMS Console <br /> ***	/opt/IGEL/RemoteManager-606100/RemoteManager.sh & |
