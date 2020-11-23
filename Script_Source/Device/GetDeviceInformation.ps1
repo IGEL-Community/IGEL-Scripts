@@ -34,17 +34,6 @@ $PSDefaultParameterValues = @{
   'Invoke-SSH*:SShSession' = $SSHSession
 }
 
-$Prepare = @"
-cd /wfs/scep_cerificates/cert0
-scep_getca 0
-scep_mkrequest 0
-scep_enroll 0
-"@
-
-$Null = ($Prepare -split "`n").ForEach{
-  Invoke-SSHCommandStream -Command $_
-}
-
 $Result = [pscustomobject]@{
   ComputerName   = $Computername
   Hostname       = Invoke-SSHCommandStream -Command 'hostname'
