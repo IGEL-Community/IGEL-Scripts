@@ -1,3 +1,5 @@
+#requires -PSEdition Desktop
+
 <#
 .\NewDeviceSCEPCert.ps1 -Computername '10.11.11.59' -SSHCredential (Import-Clixml -Path 'C:\Credentials\DeviceRoot.cred')
 .\NewDeviceSCEPCert.ps1 -Computername '10.11.11.59' -SSHCredential (Get-Credential)

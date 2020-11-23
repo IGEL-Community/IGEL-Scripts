@@ -1,3 +1,5 @@
+#requires -PSEdition Desktop
+
 <#
 .\GetDeviceInformation.ps1 -Computername '10.11.11.59' -SSHCredential (Import-Clixml -Path 'C:\Credentials\DeviceRoot.cred')
 .\GetDeviceInformation.ps1 -Computername '10.11.11.59' -SSHCredential (Get-Credential)
