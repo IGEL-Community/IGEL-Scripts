@@ -16,3 +16,14 @@
 ansible-galaxy install -r roles/requirements.yml -p ./roles/ --force
 ansible-playbook prepare_igel_icg.yml -i inventories/ICG/hosts.yml --vault-password-file ~/.vault_pass.txt
 ```
+
+### manual ICG installation
+
+since the ICG installation is interactive you have to procede as follows
+
+- Connect to the host as root (alternative: sudo -s)
+- `cd /tmp`
+- `./{{ igelicg_bin }} keystore.icg`
+- Follow wizard
+- `rm {{ igelicg_bin }} keystore.icg`
+- UMS Console -> UMS Administration -> IGEL Cloud Gateway -> Add existing Gateway to database"
