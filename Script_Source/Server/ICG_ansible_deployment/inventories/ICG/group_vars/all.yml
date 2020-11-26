@@ -1,0 +1,43 @@
+---
+# General
+ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+base_user: "icguser"
+base_user_password: "password"
+base_sudo_pass: "password"
+ansible_user: "icguser"
+ansible_user_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  663...
+
+# robertdebock.users
+default_user: icguser
+default_user_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  663...
+
+root_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  663...
+
+id_rsa_pub: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  343...
+
+# weareinteractive.openssl
+ssl_crt_name: acme.org.crt
+ssl_crt: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  363...
+
+ssl_key_name: acme.org.key
+ssl_key: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  306...
+
+# robertdebock.vsftpd / robertdebock.firewall
+ftpd_banner: Banner
+## mkpasswd --method=sha-512
+ftpuser_password: $6$UY...Wvkp/
+pasv_max_port: 40090
+pasv_min_port: 40050
+pasv_address: icg.acme.org
