@@ -1,0 +1,28 @@
+---
+# ansible-galaxy install -r roles/requirements.yml -p ./roles/ --force
+# ansible-galaxy install that.new.role.name -p ./roles/ --force
+
+- src: robertdebock.users
+  version: 4.4.1
+- src: robertdebock.bootstrap
+  version: 4.3.4
+- src: robertdebock.update
+  version: 2.3.0
+- src: robertdebock.auto_update
+  version: 2.2.7
+- src: robertdebock.ntp
+  version: 2.7.4
+- src: robertdebock.locale
+  version: 2.4.2
+- src: robertdebock.hostname
+  version: 2.0.8
+- src: weareinteractive.openssl
+  version: 2.2.1
+- src: weareinteractive.vsftpd
+  version: 1.8.1
+- src: robertdebock.firewall
+  version: 3.2.10
+- src: geerlingguy.security
+  version: 2.0.1
+- src: robertdebock.update_package_cache
+  version: 1.1.14
