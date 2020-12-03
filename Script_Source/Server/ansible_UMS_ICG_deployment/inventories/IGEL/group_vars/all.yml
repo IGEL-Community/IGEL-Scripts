@@ -119,7 +119,7 @@ ssl_key: !vault |
   ...
 
 # robertdebock.vsftpd / robertdebock.firewall
-ftpd_banner: ICG BFW Leipzig
+ftpd_banner: ICG ACME CORP
 ftpuser: ftpuser
 ftpuser_password_vault: !vault |
   $ANSIBLE_VAULT;1.1;AES256
