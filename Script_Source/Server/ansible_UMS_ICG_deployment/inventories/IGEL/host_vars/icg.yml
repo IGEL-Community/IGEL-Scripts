@@ -1,0 +1,30 @@
+---
+# IGELRMGUIServer Filetransfer, ICG -> UMS
+igelicg_port: 8443
+
+# VSFTPD
+vsftpd_control_port: 21
+vsftpd_port: 21
+vsftpd_min_port: 40050
+vsftpd_max_port: 40090
+
+# robertdebock.firewall
+firewall_default_rule: allow
+firewall_services:
+  # ssh
+  - name: ssh
+  - name: "{{ igelicg_port }}"
+    protocol: tcp
+  - name: "{{ vsftpd_control_port }}"
+    protocol: tcp
+  - name: "{{ vsftpd_port }}"
+    protocol: tcp
+  - name: "{{ vsftpd_min_port }}:{{ vsftpd_max_port }}"
+    protocol: tcp
+
+# geerlingguy.security
+security_fail2ban_custom_configuration_template: files/ssh_vsftpd_jail.local.j2
+
+# falkheiland.igelicg
+igelicg_bin: installer-2.02.110.bin
+igelicg_keystore_dir: files

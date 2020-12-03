@@ -1,0 +1,51 @@
+---
+# ansible-playbook prepare_igel_icg.yml -i inventories/IGEL/hosts.yml --vault-password-file ~/.vault_pass.txt
+
+- hosts: ICG_Server
+
+  tags:
+    - user
+
+  vars:
+    ansible_user: "{{ base_user }}"
+    ansible_password: "{{ base_user_password }}"
+    ansible_sudo_pass: "{{ base_sudo_pass }}"
+
+  become: true
+
+  roles:
+    - robertdebock.users
+
+  tasks:
+    - name: "Change password for {{default_user}}"
+      user:
+        name: "{{default_user}}"
+        password: "{{ default_user_password | string | password_hash('sha512', 'SecretSalt') }}"
+
+- hosts: ICG_Server
+
+  tags:
+    - system
+
+  become: true
+
+  tasks:
+    - name: "Edit /etc/hosts"
+      tags: hosts
+      replace:
+        path: /etc/hosts
+        regexp: "^(127.0.1.1).+"
+        replace: 127.0.1.1 {{inventory_hostname}}
+
+  roles:
+    - robertdebock.bootstrap
+    - robertdebock.update
+    - robertdebock.auto_update
+    - robertdebock.ntp
+    - robertdebock.locale
+    - robertdebock.hostname
+    - weareinteractive.openssl
+    - weareinteractive.vsftpd
+    - robertdebock.firewall
+    - geerlingguy.security
+    - falkheiland.igelicg

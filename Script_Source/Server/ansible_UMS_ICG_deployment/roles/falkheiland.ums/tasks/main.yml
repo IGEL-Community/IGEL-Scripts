@@ -1,0 +1,219 @@
+---
+- name: "Ensure {{ id_rsa_dest | dirname }} exists."
+  file:
+    dest: "{{ id_rsa_dest | dirname }}"
+    mode: 0700
+    state: directory
+
+- name: "Remove {{ id_rsa_dest }} ."
+  file:
+    dest: "{{ id_rsa_dest }}"
+    state: absent
+
+- name: "Create {{ id_rsa_dest }} ."
+  file:
+    dest: "{{ id_rsa_dest }}"
+    owner: "{{ default_user }}"
+    group: "{{ default_user }}"
+    mode: 0600
+    state: touch
+
+- name: "Edit {{ id_rsa_dest }} ."
+  blockinfile:
+    path: "{{ id_rsa_dest }}"
+    block: "{{ default_id_rsa }}"
+
+- name: "Remove {{ id_rsa_pub_dest }} ."
+  file:
+    dest: "{{ id_rsa_pub_dest }}"
+    state: absent
+
+- name: "Create {{ id_rsa_pub_dest }} ."
+  file:
+    dest: "{{ id_rsa_pub_dest }}"
+    owner: "{{ default_user }}"
+    group: "{{ default_user }}"
+    mode: 0644
+    state: touch
+
+- name: "Edit {{ id_rsa_pub_dest }} ."
+  blockinfile:
+    path: "{{ id_rsa_pub_dest }}"
+    block: "{{ default_id_rsa_pub }}"
+
+- name: "Install libqt5core5a for use in UMS"
+  package:
+    name: libqt5core5a
+    state: present
+
+- name: "Install net-tools"
+  package:
+    name: net-tools
+    state: present
+
+- name: "Install lftp"
+  tags: lftp
+  package:
+    name: lftp
+    state: present
+
+- name: "Download UMS binary"
+  get_url:
+    url: "{{ igelums_base_url }}{{ igelums_bin }}"
+    dest: "{{ igelums_dl_dir }}"
+    mode: "0755"
+
+- name: "Create backup directory if it does not exist"
+  file:
+    path: "{{ igelums_backup_path }}"
+    state: directory
+    mode: "0755"
+
+- name: "Synchronization of {{ igelums_backup_remote_host }}:{{ igelums_backup_remote_dir }} to {{ igelums_backup_path }}."
+  tags: sync-pull
+  shell: |
+    ssh-keyscan {{ igelums_backup_remote_host }} >> ~/.ssh/known_hosts
+    rsync -zvrR --delete --no-relative {{ default_user }}@{{ igelums_backup_remote_host }}:{{ igelums_backup_remote_dir }} {{ igelums_backup_path }} -e "ssh -i /home/{{ default_user }}/.ssh/id_rsa"
+    exit 0
+
+- name: "Create ums_filetransfer directory if it does not exist"
+  file:
+    path: /opt/IGEL/RemoteManager/rmguiserver/webapps/ums_filetransfer/
+    state: directory
+    mode: "0755"
+
+- name: "Unarchive a file that is already on the remote machine"
+  unarchive:
+    src: "{{ igelums_backup_path }}/ums_filetransfer.tgz"
+    dest: /opt/IGEL/RemoteManager/rmguiserver/webapps/ums_filetransfer/
+    remote_src: yes
+
+- name: "Remove {{ igelums_backup_path }}/backup.sh ."
+  tags: cron
+  file:
+    dest: "{{ igelums_backup_path }}/backup.sh"
+    state: absent
+
+- name: "Create {{ igelums_backup_path }}/backup.sh ."
+  tags: cron
+  file:
+    dest: "{{ igelums_backup_path }}/backup.sh"
+    state: touch
+    mode: "755"
+
+- name: "Edit {{ igelums_backup_path }}/backup.sh ."
+  tags: cron
+  blockinfile:
+    path: "{{ igelums_backup_path }}/backup.sh"
+    block: |
+      #!/bin/bash
+      export PATH=/bin:/usr/bin:/usr/local/bin
+      cd {{ igelums_backup_path }}
+      tar -zcv --exclude='IGEL_OS*' --exclude='WEB-INF' -f {{ igelums_backup_path }}/ums_filetransfer.tgz /opt/IGEL/RemoteManager/rmguiserver/webapps/ums_filetransfer
+      chmod -R +r *
+
+- name: "backup job"
+  tags: cron
+  cron:
+    name: "backup"
+    minute: "0"
+    hour: "23"
+    job: "{{ igelums_backup_path }}/backup.sh"
+    user: root
+    cron_file: /etc/crontab
+
+- name: "Remove {{ igelums_backup_path }}/sync_backup_{{ igelums_backup_remote_host }}.sh ."
+  tags: cron
+  file:
+    dest: "{{ igelums_backup_path }}/sync_backup_{{ igelums_backup_remote_host }}.sh"
+    state: absent
+
+- name: "Create {{ igelums_backup_path }}/sync_backup_{{ igelums_backup_remote_host }}.sh ."
+  tags: cron
+  file:
+    dest: "{{ igelums_backup_path }}/sync_backup_{{ igelums_backup_remote_host }}.sh"
+    state: touch
+    mode: "755"
+
+- name: "Edit {{ igelums_backup_path }}/sync_backup_{{ igelums_backup_remote_host }}.sh ."
+  tags: cron
+  blockinfile:
+    path: "{{ igelums_backup_path }}/sync_backup_{{ igelums_backup_remote_host }}.sh"
+    block: |
+      #!/bin/bash
+      export PATH=/bin:/usr/bin:/usr/local/bin
+      target_host={{ igelums_backup_remote_host }}
+      ssh-keyscan $target_host >> ~/.ssh/known_hosts
+      cd {{ igelums_backup_path }}
+      scp  *.* {{ default_user }}@$target_host:{{ igelums_backup_remote_dir }}
+
+- name: "sync backup to {{ igelums_backup_remote_host }} job"
+  tags: cron
+  cron:
+    name: "sync_backup_{{ igelums_backup_remote_host }}"
+    minute: "5"
+    hour: "23"
+    job: "{{ igelums_backup_path }}/sync_backup_{{ igelums_backup_remote_host }}.sh"
+    user: "{{ default_user }}"
+    cron_file: /etc/crontab
+
+- name: "Remove {{ igelums_backup_path }}/sync_filetransfer_icg.sh ."
+  tags: cron
+  file:
+    dest: "{{ igelums_backup_path }}/sync_filetransfer_icg.sh"
+    state: absent
+
+- name: "Create {{ igelums_backup_path }}/sync_filetransfer_icg.sh ."
+  tags: cron
+  file:
+    dest: "{{ igelums_backup_path }}/sync_filetransfer_icg.sh"
+    state: touch
+    mode: "755"
+
+- name: "Edit {{ igelums_backup_path }}/sync_filetransfer_icg.sh ."
+  tags: cron
+  blockinfile:
+    path: "{{ igelums_backup_path }}/sync_filetransfer_icg.sh"
+    block: |
+      #!/bin/bash
+      lftp -e "mirror -R --only-newer --ignore-time --exclude WEB-INF/ --exclude supportinfo/ /opt/IGEL/RemoteManager/rmguiserver/webapps/ums_filetransfer/ /; bye" {{ icg_fqdn }}
+
+- name: "sync filetransfer to icg job"
+  tags: cron
+  cron:
+    name: "sync_filetransfer_icg"
+    minute: "10"
+    hour: "23"
+    job: "{{ igelums_backup_path }}/sync_filetransfer_icg.sh"
+    user: root
+    cron_file: /etc/crontab
+
+- name: "set icg ftp credentials"
+  tags: lftp
+  lineinfile:
+    path: "/root/.netrc"
+    line: "machine {{ icg_fqdn }} login {{ ftpuser }} password {{ ftpuser_password_vault }}"
+    create: yes
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: "disable lftp certificate verification"
+  tags: lftp
+  lineinfile:
+    path: "/root/.lftprc"
+    line: set ssl:verify-certificate false
+    create: yes
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: "manual steps necessary to install UMS"
+  debug:
+    msg: |
+      1. Connect to the host as root (alternative: sudo -s)
+      2. cd /tmp
+      3. ./{{ igelums_bin }}
+      4. Follow wizard
+      5. rm {{ igelums_bin }}
+      6. UMS Administrator -> Backup -> Restore latest backup (optional)

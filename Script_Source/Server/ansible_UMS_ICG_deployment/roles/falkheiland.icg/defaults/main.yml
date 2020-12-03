@@ -1,0 +1,14 @@
+---
+# defaults file for igelicg
+
+# Default Base URL to ICG binary
+igelicg_base_url: http://fwu.igel.com/files/IGEL_CLOUD_GATEWAY
+
+# Default name of the keystore file
+igelicg_keystore_icg: keystore.icg
+
+# Default Communication TCP Port to the ICG + between ICG and UMS
+igelicg_port: 8443
+
+# Default Download dir
+igelicg_dl_dir: /tmp
