@@ -1,5 +1,11 @@
 # Linux Scripts
 
+Deploy UMS and ICG server on Ubuntu 20.04 (tested) with ansible playbooks. Since both products using interactive installers, a complete automation is not possible. So manual actions are still needed as described below.
+
+The UMS server can be managed via ssh with public key and via RDP.
+The ICG server can be managed via ssh with public key and has a FTP server in explicit passive mode with encryption installed.
+The UMS server runs 3 cronjobs to create a backup, sync the backup via scp to a share and sync the ums_filetransfer to the ICG ftp share.
+
 ## Ansible UMS + ICG Deployment
 
 - create basic installation for ICG and UMS server (tested with Ubuntu 18.04)
