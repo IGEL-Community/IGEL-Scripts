@@ -26,3 +26,9 @@
   version: 2.0.1
 - src: robertdebock.update_package_cache
   version: 1.1.14
+- src: rheinwerk.install_root_ca_certs
+  version: v0.0.4
+- src: robertdebock.gnome
+  version: 1.1.5
+- src: robertdebock.xrdp
+  version: 1.1.5
