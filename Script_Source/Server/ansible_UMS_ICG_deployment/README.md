@@ -58,3 +58,10 @@ proceed with the manual ICG installation:
 Filetransfer:
 
 The ICG server is configured to have a vsftpd server installed, which uses explicit passive FTPS. There is a cron job configured on the UMS Server to sync the file_transfer files to the FTP user home. That way devices can use Firmwareupdates via a profile. Corporate Design files don't work atm with that FTP implementation, a ticket with IGEL is open (2020-12-03).
+
+**ToDo**: I will be moving from FTPS to HTTPS, since FTPS is not supported with all the possible file upload possibilities of the UMS, but HTTPS is:
+
+- Universal Firmware Update
+- Files
+- Corporate Design
+- Custom Partition
