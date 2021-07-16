@@ -19,4 +19,15 @@
 | IGEL OS endpoint SSH setup | -	On IGEL OS endpoint, open a terminal window as user <br /> -	Generate key pairs (~/.ssh folder) <br /> ***	ssh-keygen  <br /> -	Copy public key to Linux UMS server <br /> ***	ssh-copy-id username@ums_server <br /> -	Test connection <br /> ***	ssh -l username@ums_server |
 | SSH X11 forwarding from IGEL OS endpoint to UMS server | -	On IGEL OS endpoint, open a terminal window and start SSH connection to the UMS server <br /> ***	ssh -X username@ums_server <br /> -	**Note**: For slow connections, add -C (compression) to the ssh command |
 | Install UMS console | - During the install of the UMS Console, add version number to the path: /opt/IGEL/RemoteManager-606100 |
-| Start UMS console | -	On IGEL OS endpoint, in the SSH terminal window, start UMS Console <br /> ***	/opt/IGEL/RemoteManager-606100/RemoteManager.sh & |
+| Start UMS Console | -	On IGEL OS endpoint, in the SSH terminal window, start UMS Console <br /> ***	/opt/IGEL/RemoteManager-606100/RemoteManager.sh & |
+| Start UMS Administrator | -	On IGEL OS endpoint, in the SSH terminal window, start UMS Administrator <br /> *** sudo /opt/IGEL/RemoteManager/RMAdmin.sh & |
+
+**How to keep X11-forwarding working after changing user to root inside a SSH session**
+
+This is by default not allowed on Unix/Linux systems, because the X11 display connection belongs to the user you used to log with when connecting to your remote SSH server. X11-forwarding mechanism does not allow anyone to use the open display.
+
+Manually retrieve X credentials in the su/sudo context by looking up the “xauth list” for the original username and then adding them using “xauth add” to the current context.
+
+```
+sudo xauth add $(xauth -f ~/.Xauthority list|tail -1)
+  ```
